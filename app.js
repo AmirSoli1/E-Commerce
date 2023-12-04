@@ -1,9 +1,18 @@
 require('dotenv').config();
+require('express-async-errors');
 
 const express = require('express');
 const app = express();
 
 const connect = require('./db/connect');
+const errorHandler = require('./middleware/error-handler');
+
+app.use(express.json());
+app.use(errorHandler);
+
+app.get('/', (req, res) => {
+  res.send('Home Page');
+});
 
 const port = process.env.PORT || 5000;
 
