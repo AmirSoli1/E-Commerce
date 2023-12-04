@@ -17,11 +17,11 @@ const authRouter = require('./routes/authRoutes');
 app.use(morgan('tiny'));
 app.use(express.json());
 
-app.use('/api/v1/auth', authRouter);
-
 app.get('/', (req, res) => {
   res.send('Home Page');
 });
+
+app.use('/api/v1/auth', authRouter);
 
 app.use(notFound);
 app.use(errorHandler);
