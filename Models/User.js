@@ -3,18 +3,24 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    require: true,
-    maxLength: [20, `name can't exceed 20 characters`],
-    minLength: [2, `name must be at least 2 characters`],
+    required: [true, 'Please provide a name'],
+    maxLength: [50, `name can't exceed 20 characters`],
+    minLength: [3, `name must be at least 2 characters`],
   },
   email: {
     type: String,
-    require: true,
+    required: [true, 'Please provide an email'],
     trim: true,
   },
   password: {
     type: String,
-    require: true,
+    required: [true, 'Please provide a password'],
+    minLength: [6, `password must have at least 6 characters`],
+  },
+  role: {
+    type: String,
+    enum: ['admin', 'user'],
+    default: 'user',
   },
 });
 
