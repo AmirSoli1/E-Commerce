@@ -4,21 +4,27 @@ require('express-async-errors');
 const express = require('express');
 const app = express();
 
-const connect = require('./db/connect');
-const errorHandler = require('./middleware/error-handler');
+const morgan = require('morgan');
 
+const connectDB = require('./db/connect');
+const errorHandler = require('./middleware/error-handler');
+const notFound = require('./middleware/not-found');
+
+app.use(morgan('tiny'));
 app.use(express.json());
-app.use(errorHandler);
 
 app.get('/', (req, res) => {
   res.send('Home Page');
 });
 
+app.use(notFound);
+app.use(errorHandler);
+
 const port = process.env.PORT || 5000;
 
 const start = async () => {
   try {
-    await connect(process.env.MONGO_URL);
+    await connectDB(process.env.MONGO_URL);
     app.listen(port, console.log(`Server is listening on port ${port}...`));
   } catch (err) {
     console.log(err);
