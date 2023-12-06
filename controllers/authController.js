@@ -1,5 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
-const { BadRequestError } = require('../errors');
+const {
+  BadRequestError,
+  NotFoundError,
+  UnauthenticatedError,
+} = require('../errors');
 const User = require('..//Models/User');
 const { attachCookiesToResponse } = require('../utils');
 
@@ -21,7 +25,23 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  res.send('login');
+  const { email, password } = req.body;
+  if (!email || !password) {
+    throw new BadRequestError('Please fill all the fields!');
+  }
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new UnauthenticatedError('Inccorect email or password');
+  }
+  const isValid = await user.comparePassword(password);
+  if (!isValid) {
+    throw new UnauthenticatedError('Inccorect email or password');
+  }
+
+  const tokenUser = { name: user.name, userId: user._id, role: user.role };
+  attachCookiesToResponse({ res, tokenUser });
+
+  res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
 const logout = async (req, res) => {
