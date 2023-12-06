@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 
 //middlewares
 const connectDB = require('./db/connect');
@@ -16,6 +17,7 @@ const authRouter = require('./routes/authRoutes');
 
 app.use(morgan('tiny'));
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.send('Home Page');
