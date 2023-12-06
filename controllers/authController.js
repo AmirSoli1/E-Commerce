@@ -45,8 +45,11 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  console.log('gorbe');
-  res.send('logout');
+  res.cookie('token', 'blah', {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  });
+  res.status(StatusCodes.OK).json({ msg: 'logged out' });
 };
 
 module.exports = { register, login, logout };
