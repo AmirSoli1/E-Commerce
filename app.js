@@ -5,17 +5,25 @@ const express = require('express');
 const app = express();
 
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 
+//middlewares
 const connectDB = require('./db/connect');
 const errorHandler = require('./middleware/error-handler');
 const notFound = require('./middleware/not-found');
 
+//routers
+const authRouter = require('./routes/authRoutes');
+
 app.use(morgan('tiny'));
 app.use(express.json());
+app.use(cookieParser(process.env.JWT_SECRET));
 
 app.get('/', (req, res) => {
   res.send('Home Page');
 });
+
+app.use('/api/v1/auth', authRouter);
 
 app.use(notFound);
 app.use(errorHandler);
