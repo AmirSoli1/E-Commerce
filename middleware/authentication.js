@@ -1,4 +1,4 @@
-const { UnauthenticatedError, UnautherizedError } = require('../errors');
+const { UnauthenticatedError, UnauthorizedError } = require('../errors');
 const { isTokenValid } = require('../utils');
 
 const authenticateUser = (req, res, next) => {
@@ -19,7 +19,7 @@ const authenticateUser = (req, res, next) => {
 const authorizePermissions = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      throw new UnautherizedError('Unautherized to access this route');
+      throw new UnauthorizedError('Unautherized to access this route');
     }
     next();
   };

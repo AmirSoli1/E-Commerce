@@ -1,9 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const {
-  BadRequestError,
-  NotFoundError,
-  UnauthenticatedError,
-} = require('../errors');
+const { BadRequestError, UnauthenticatedError } = require('../errors');
 const User = require('..//Models/User');
 const { attachCookiesToResponse, createTokenUser } = require('../utils');
 

@@ -6,7 +6,11 @@ const {
   BadRequestError,
   UnauthenticatedError,
 } = require('../errors');
-const createTokenUser = require('../utils');
+const {
+  attachCookiesToResponse,
+  createTokenUser,
+  checkPermissions,
+} = require('../utils');
 
 const getAllUsers = async (req, res) => {
   const users = await User.find({ role: 'user' }).select('-password');
@@ -19,6 +23,7 @@ const getSingleUser = async (req, res) => {
   if (!user) {
     throw new NotFoundError('User does not exist');
   }
+  checkPermissions(req.user, user._id);
   res.status(StatusCodes.OK).json({ user });
 };
 
@@ -33,7 +38,11 @@ const updateUser = async (req, res) => {
     throw new BadRequestError('Please fill all the fields!');
   }
 
-  const user = await User.findOneAndUpdate({ name, email });
+  const user = await User.findOneAndUpdate(
+    { _id: req.user.userId },
+    { name, email },
+    { new: true, runValidators: true }
+  );
   const tokenUser = createTokenUser(user);
   attachCookiesToResponse({ res, tokenUser });
 
