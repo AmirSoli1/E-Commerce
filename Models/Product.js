@@ -1,41 +1,42 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Please provide a name"],
+      required: [true, 'Please provide a name'],
       maxLength: [50, `name can't exceed 50 characters`],
     },
     price: {
       type: Number,
-      required: [true, "Please provide a price"],
+      required: [true, 'Please provide a price'],
       default: 0,
     },
     description: {
       type: String,
-      required: [true, "Please provide a description"],
+      required: [true, 'Please provide a description'],
       maxLength: [1000, `description can't exceed 1000 characters`],
     },
     image: {
       type: String,
-      default: "/uploads/example.jpeg",
+      default: '/uploads/example.jpeg',
     },
     category: {
       type: String,
-      required: [true, "Please provide a product category"],
-      enum: ["office", "kitchen", "bedroom"],
+      required: [true, 'Please provide a product category'],
+      enum: ['office', 'kitchen', 'bedroom'],
     },
     company: {
       type: String,
-      required: [true, "Please provide a product company"],
+      required: [true, 'Please provide a product company'],
       enum: {
-        values: ["ikea", "liddy", "marcos"],
-        message: "{VALUE} is not supported",
+        values: ['ikea', 'liddy', 'marcos'],
+        message: '{VALUE} is not supported',
       },
     },
     colors: {
       type: [String],
+      default: ['#222'],
       required: true,
     },
     featured: {
@@ -57,11 +58,11 @@ const productSchema = new mongoose.Schema(
     },
     user: {
       type: mongoose.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Product", productSchema);
+module.exports = mongoose.model('Product', productSchema);

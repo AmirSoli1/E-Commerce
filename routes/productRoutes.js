@@ -4,7 +4,7 @@ const router = express.Router();
 const {
   createProduct,
   getAllProducts,
-  getSingleProsuct,
+  getSingleProduct,
   updateProduct,
   deleteProduct,
   uploadImage,
@@ -26,7 +26,7 @@ router
 
 router
   .route('/:id')
-  .get(getSingleProsuct)
+  .get(getSingleProduct)
   .patch(authenticateUser, authorizePermissions('admin'), updateProduct)
   .delete(authenticateUser, authorizePermissions('admin'), deleteProduct);
 

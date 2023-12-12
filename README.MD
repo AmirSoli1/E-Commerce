@@ -193,25 +193,25 @@
 - [x] rest only by admin (setup middlewares)
 - [x] typical setup
 - [x] router.route('/uploadImage').post(uploadImage)
-- [] import productRoutes as productRouter in the app.js
-- [] setup app.use('/api/v1/products', productRouter)
+- [x] import productRoutes as productRouter in the app.js
+- [x] setup app.use('/api/v1/products', productRouter)
 
 #### Product Routes in Postman
 
 #### Create Product
 
-- [] create user property on req.body and set it equal to userId (req.user)
-- [] pass req.body into Product.create
-- [] send back the product
+- [x] create user property on req.body and set it equal to userId (req.user)
+- [x] pass req.body into Product.create
+- [x] send back the product
 
 #### Remaining Controllers (apart from uploadImage)
 
-- [] getAllProducts
-- [] getSingleProduct
-- [] updateProduct
-- [] deleteProduct
-- [] typical CRUD, utilize (task or job) project
-- [] remember we check already for role 'admin'
+- [x] getAllProducts
+- [x] getSingleProduct
+- [x] updateProduct
+- [x] deleteProduct
+- [x] typical CRUD, utilize (task or job) project
+- [x] remember we check already for role 'admin'
 
 #### Upload Image
 
