@@ -1,23 +1,78 @@
 const { StatusCodes } = require('http-status-codes');
+const Product = require('../Models/Product');
+const Review = require('../Models/Review');
+
+const {
+  NotFoundError,
+  BadRequestError,
+  UnauthorizedError,
+} = require('../errors');
+
+const { checkPermissions } = require('../utils');
 
 const createReview = async (req, res) => {
-  res.status(StatusCodes.CREATED).send('createReview');
+  const { product } = req.body;
+  const isProductExists = await Product.findOne({ _id: product });
+  if (!isProductExists) {
+    throw new NotFoundError('Product does not exist');
+  }
+
+  const isReviewExists = await Review.findOne({
+    product,
+    user: req.user.userId,
+  });
+  if (isReviewExists) {
+    throw new BadRequestError(
+      'User already submitted a review for this product'
+    );
+  }
+
+  req.body.user = req.user.userId;
+  const review = await Review.create(req.body);
+  res.status(StatusCodes.CREATED).json(review);
 };
 
 const getAllReviews = async (req, res) => {
-  res.status(StatusCodes.OK).send('getAllReviews');
+  const reviews = await Review.find({});
+  res.status(StatusCodes.OK).json({ reviews, count: reviews.length });
 };
 
 const getSingleReview = async (req, res) => {
-  res.status(StatusCodes.OK).send('getSingleReview');
+  const review = await Review.findOne({ _id: req.params.id });
+  if (!review) {
+    throw new NotFoundError('review does not exist');
+  }
+  res.status(StatusCodes.OK).json(review);
 };
 
 const updateReview = async (req, res) => {
-  res.status(StatusCodes.OK).send('updateReview');
+  const { rating, title, comment } = req.body;
+  const review = await Review.findOne({ _id: req.params.id });
+  if (!review) {
+    throw new NotFoundError('review does not exist');
+  }
+
+  checkPermissions(req.user, review.user);
+
+  review.rating = rating;
+  review.title = title;
+  review.comment = comment;
+
+  await review.save();
+  res.status(StatusCodes.OK).json(review);
 };
 
 const deleteReview = async (req, res) => {
-  res.status(StatusCodes.OK).send('deleteReview');
+  const review = await Review.findOne({ _id: req.params.id });
+  if (!review) {
+    throw new NotFoundError('review does not exist');
+  }
+
+  checkPermissions(req.user, review.user);
+
+  await review.deleteOne();
+
+  res.status(StatusCodes.OK).json({ msg: 'Review deleted' });
 };
 
 module.exports = {
